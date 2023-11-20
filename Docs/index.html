@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HTOffice Docs</title>
+    <style>
+        .head{
+            background-color:gray;
+        }
+        .menu{
+            background-color:white;
+            color:black;
+            text-decoration:none;
+            border-width:1px;
+            border-style:solid;
+        }
+        #main{
+            border-width:1px;
+            border-style:solid;
+            border-color:black;
+        }
+        #ctxmenu{
+            display:none;
+            position:fixed;
+            left:0px;
+            top:0px;
+            width:200px;
+            height:100px;
+            border:1px solid #000;
+            background-color:#fff;
+        }
+    </style>
+    <script>
+        function o(q,e){
+                return {
+                q: e,
+                m: q, //0:Query(Can't AppendChild) 1:Element(Can AppendChild)
+                attr: function(id,ct){this.q.setAttribute(id,ct);return this},
+                html: function(ct){this.q.innerHTML=ct;return this},
+                text: function(ct){this.q.innerText=ct;return this},
+                apde: function(e){if(e.m){this.q.appendChild(e.q)}else{console.error("aLineElement: It's can't apde")};return this},
+                style:function(){return q.style},
+                f   : function(f){return this}}}
+        function q(q){return o(0,document.querySelector(q)) }
+        function id(q){return o(0,document.getElementById(q)) }
+        function e(q){return o(1,document.createElement(q)) }
+        ///////////////////////////////////////////////////////
+        let selectE;
+        let num = 0;
+
+        function hide(e,mode){
+            e.attr("style","display:"+(mode?"none":"block"));
+        }
+        onload=()=>{
+            hide(q("#textmenu"),1);
+            hide(q("#imgmenu"),1);
+            hide(q("#custommenu"),1);
+            document.addEventListener('contextmenu',(e)=>{
+                let d = document.getElementById("ctxmenu");
+                d.style.left=e.pageX+"px";
+                d.style.top=e.pageY+"px";
+                d.style.display="block";
+            });
+        }
+        function contexclick(func){
+            hide(q("#ctxmenu"),1)
+            switch(func){
+                case 1:
+                    let ne = document.createElement("p");
+                    ne.setAttribute("id","e"+num)
+                    
+                    ne.style.fontSize = "20px";
+                    ne.addEventListener('click',function(){
+                        hide(q("#textmenu"),0);
+                        q("#intxt").q.value = this.innerText;
+                        q("#fsize").q.value = this.style.fontSize;
+                        selectE = this;
+                    });
+                    ne.innerText="Text";
+                    q("#main").apde({q:ne,m:1});
+                    
+                    num++;
+                    break;
+            }
+        }
+        function textchange(){
+            selectE.innerText = q("#intxt").q.value;
+        }
+        function fontchange(){
+            selectE.style.fontSize = q("#fsize").q.value;
+        }
+        function delthis(){
+            selectE.remove();
+            selectE = null;
+            
+            hide(q("#textmenu"),1);
+            hide(q("#imgmenu"),1);
+            hide(q("#custommenu"),1);
+        }
+    </script>
+</head>
+<body>
+    <div class="head">
+        <div class="menus">
+            <a class="menu" id="jsonsave" href="#">JSONとして保存</a>
+            <a class="menu" id="htmlsave" href="#">HTMLとして保存</a>
+        </div>
+        <br>
+        <div class="emenus">
+            <div id="textmenu">
+                テキスト<input type="text" id="intxt" onchange="textchange()">
+                フォントサイズ<input type="text" id="fsize" onchange="fontchange()">
+                <a class="menu" id="edelete" href="#" onclick="delthis()">削除</a>
+            </div>
+            <div id="imgmenu">
+                画像<a class="menu" id="pic" href="#"><img id="optimg">選択</img></a>
+                サイズ<input type="text" id="psize">
+                <a class="menu" id="edelete" href="#">削除</a>
+            </div>
+            <div id="custommenu">
+                内容<input type="text" id="in">
+                <a class="menu" id="edelete" href="#">削除</a>
+            </div>
+        </div>
+    </div>
+    <div id="main"></div>
+    <div id="ctxmenu">
+        <ul>
+            <a onclick="contexclick(1)" href="#">文字を追加</a><br>
+            <a onclick="contexclick(2)" href="#">画像を追加</a><br>
+            <a onclick="contexclick(3)" href="#">その他を追加</a><br>
+        </ul>
+    </div>
+</body>
+</html>
