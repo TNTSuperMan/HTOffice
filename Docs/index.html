@@ -30,6 +30,9 @@
             border:1px solid #000;
             background-color:#fff;
         }
+        #picfile{
+            display:none;
+        }
     </style>
     <script>
         function o(q,e){
@@ -47,7 +50,6 @@
         function e(q){return o(1,document.createElement(q)) }
         ///////////////////////////////////////////////////////
         let selectE;
-        let num = 0;
 
         function hide(e,mode){
             e.attr("style","display:"+(mode?"none":"block"));
@@ -56,6 +58,8 @@
             hide(q("#textmenu"),1);
             hide(q("#imgmenu"),1);
             hide(q("#custommenu"),1);
+
+            //RightClickMenu
             document.addEventListener('contextmenu',(e)=>{
                 let d = document.getElementById("ctxmenu");
                 d.style.left=e.pageX+"px";
@@ -66,30 +70,95 @@
         function contexclick(func){
             hide(q("#ctxmenu"),1)
             switch(func){
-                case 1:
+                case 1: //Text
                     let ne = document.createElement("p");
-                    ne.setAttribute("id","e"+num)
-                    
                     ne.style.fontSize = "20px";
-                    ne.addEventListener('click',function(){
-                        hide(q("#textmenu"),0);
-                        q("#intxt").q.value = this.innerText;
-                        q("#fsize").q.value = this.style.fontSize;
-                        selectE = this;
-                    });
                     ne.innerText="Text";
+                    ne.addEventListener('click',textclick);
                     q("#main").apde({q:ne,m:1});
-                    
-                    num++;
+                    break;
+                case 2: //Picture
+                    let nue = document.createElement("img");
+                    nue.style.width = "100px";
+                    nue.src = "undefined.png";
+                    nue.addEventListener('click',picclick);
+                    nue.src = 
+                    q("#main").apde({q:nue,m:1});
+                    break;
+                case 3: //Etc
+                    let xuw = document.createElement("div");
+                    xuw.innerHTML = "<p>Please Input</p>"
+                    xuw.addEventListener('click',etcclick);
+                    q("#main").apde({q: xuw,m:1});
                     break;
             }
         }
+        //filedialog
+        const showOpenFileDialog = () => {
+            return new Promise(resolve => {
+                const input = q("#picfile").q;
+                input.accept=".png";
+                input.onchange = (event) => { resolve(event.target.files[0]); };
+                input.click();
+            });
+        };
+
+        const readAsText = file => {
+            return new Promise(resolve => {
+                const reader = new FileReader();
+                reader.readAsDataURL(file);
+                reader.onload = () => { resolve(reader.result); };
+            });
+        };
+
+        //Text Menu
+        function textclick(){
+            hide(q("#textmenu"),0);
+            hide(q("#imgmenu"),1);
+            hide(q("#custommenu"),1);
+            q("#text-txt").q.value = this.innerText;
+            q("#text-fsize").q.value = this.style.fontSize;
+            selectE = this;
+        }
         function textchange(){
-            selectE.innerText = q("#intxt").q.value;
+            selectE.innerText = q("#text-txt").q.value;
         }
         function fontchange(){
-            selectE.style.fontSize = q("#fsize").q.value;
+            selectE.style.fontSize = q("#text-fsize").q.value;
         }
+
+        //Picture Menu
+        function picclick(){
+            hide(q("#textmenu"),1);
+            hide(q("#imgmenu"),0);
+            hide(q("#custommenu"),1);
+            q("#picture-psize").q.value = this.style.width;
+            selectE = this;
+        }
+        function selectpicture(){
+            (async ()=>{
+                const h = await showOpenFileDialog();
+                selectE.src = await readAsText(h);
+                
+            })();
+        }
+        function sizechange(){
+            selectE.style.width = q("#picture-psize").q.value;
+        }
+        
+        //ETC Menu
+        function etcclick(){
+            hide(q("#textmenu"),1);
+            hide(q("#imgmenu"),1);
+            hide(q("#custommenu"),0);
+            q("#etc-in").q.value = this.innerHTML;
+            selectE = this;
+        }
+        function etcchange(){
+            selectE.innerHTML = q("#etc-in").q.value;
+        }
+
+        //All
         function delthis(){
             selectE.remove();
             selectE = null;
@@ -98,39 +167,50 @@
             hide(q("#imgmenu"),1);
             hide(q("#custommenu"),1);
         }
+        
+
+        //Export
+        function outhtml(){
+            let html = "<!doctype html><html><head><meta charset=\"UTF-8\"></head><body>" + q("#main").q.innerHTML + "</body>";
+            let a = q("#downurl").q;
+            a.href = URL.createObjectURL(new Blob([html],{type:'text/html'}));
+            a.download = 'document.html';
+            a.click();
+        }
     </script>
 </head>
 <body>
     <div class="head">
         <div class="menus">
-            <a class="menu" id="jsonsave" href="#">JSONとして保存</a>
-            <a class="menu" id="htmlsave" href="#">HTMLとして保存</a>
+            <!--<a class="menu" id="jsonsave" href="#">JSONとして保存</a>-->
+            <a class="menu" id="htmlsave" href="#" onclick="outhtml()">HTMLとして保存</a>
         </div>
         <br>
         <div class="emenus">
             <div id="textmenu">
-                テキスト<input type="text" id="intxt" onchange="textchange()">
-                フォントサイズ<input type="text" id="fsize" onchange="fontchange()">
+                テキスト<input type="text" id="text-txt" onchange="textchange()">
+                フォントサイズ<input type="text" id="text-fsize" onchange="fontchange()">
                 <a class="menu" id="edelete" href="#" onclick="delthis()">削除</a>
             </div>
             <div id="imgmenu">
-                画像<a class="menu" id="pic" href="#"><img id="optimg">選択</img></a>
-                サイズ<input type="text" id="psize">
-                <a class="menu" id="edelete" href="#">削除</a>
+                画像<a class="menu" href="#" onclick="selectpicture()">選択</a>
+                サイズ<input type="text" id="picture-psize" onchange="sizechange()">
+                <a class="menu" id="edelete" href="#" onclick="delthis()">削除</a>
             </div>
             <div id="custommenu">
-                内容<input type="text" id="in">
-                <a class="menu" id="edelete" href="#">削除</a>
+                内容<input type="text" id="etc-in" onchange="etcchange()">
+                <a class="menu" id="edelete" href="#" onclick="delthis()">削除</a>
             </div>
         </div>
     </div>
     <div id="main"></div>
     <div id="ctxmenu">
-        <ul>
-            <a onclick="contexclick(1)" href="#">文字を追加</a><br>
-            <a onclick="contexclick(2)" href="#">画像を追加</a><br>
-            <a onclick="contexclick(3)" href="#">その他を追加</a><br>
-        </ul>
+        <a onclick="contexclick(1)" href="#">文字を追加</a><br>
+        <a onclick="contexclick(2)" href="#">画像を追加</a><br>
+        <a onclick="contexclick(3)" href="#">その他を追加</a><br>
+        <a onclick="contexclick(0)" href="#">閉じる</a><br>
     </div>
+    <input type="file" id="picfile">
+    <a id="downurl" style="display:none"></a>
 </body>
 </html>
