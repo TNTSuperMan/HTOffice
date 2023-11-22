@@ -25,8 +25,18 @@
             position:fixed;
             left:0px;
             top:0px;
-            width:200px;
-            height:100px;
+            width:100px;
+            height:75px;
+            border:1px solid #000;
+            background-color:#fff;
+        }
+        #e_ctxmenu{
+            display:none;
+            position:fixed;
+            left:0px;
+            top:0px;
+            width:50px;
+            height:25px;
             border:1px solid #000;
             background-color:#fff;
         }
@@ -60,7 +70,19 @@
             hide(q("#custommenu"),1);
 
             //RightClickMenu
-            document.addEventListener('contextmenu',(e)=>{
+            document.oncontextmenu = (e)=>{
+                let d = document.getElementById("ctxmenu");
+                d.style.left=e.pageX+"px";
+                d.style.top=e.pageY+"px";
+                d.style.display="block";
+                return false;
+            };
+            document.onclick = ()=>{
+                q("#ctxmenu").q.style.display="none";
+                q("#e_ctxmenu").q.style.display="none";
+            }
+            //Double Click
+            document.addEventListener('dblclick',(e)=>{
                 let d = document.getElementById("ctxmenu");
                 d.style.left=e.pageX+"px";
                 d.style.top=e.pageY+"px";
@@ -74,7 +96,9 @@
                     let ne = document.createElement("p");
                     ne.style.fontSize = "20px";
                     ne.innerText="Text";
+                    ne.style.color = "#000000";
                     ne.addEventListener('click',textclick);
+                    ne.oncontextmenu = e_ctx;
                     q("#main").apde({q:ne,m:1});
                     break;
                 case 2: //Picture
@@ -82,13 +106,14 @@
                     nue.style.width = "100px";
                     nue.src = "undefined.png";
                     nue.addEventListener('click',picclick);
-                    nue.src = 
+                    nue.oncontextmenu = e_ctx;
                     q("#main").apde({q:nue,m:1});
                     break;
                 case 3: //Etc
                     let xuw = document.createElement("div");
                     xuw.innerHTML = "<p>Please Input</p>"
                     xuw.addEventListener('click',etcclick);
+                    xuw.oncontextmenu = e_ctx;
                     q("#main").apde({q: xuw,m:1});
                     break;
             }
@@ -118,6 +143,9 @@
             hide(q("#custommenu"),1);
             q("#text-txt").q.value = this.innerText;
             q("#text-fsize").q.value = this.style.fontSize;
+            q("#text-color").q.value = "#000000";;
+            console.log(this.style.color.r);
+            console.log(JSON.stringify(this.style.color));
             selectE = this;
         }
         function textchange(){
@@ -125,6 +153,9 @@
         }
         function fontchange(){
             selectE.style.fontSize = q("#text-fsize").q.value;
+        }
+        function textcolorchange(){
+            selectE.style.color = q("#text-color").q.value;
         }
 
         //Picture Menu
@@ -167,6 +198,15 @@
             hide(q("#imgmenu"),1);
             hide(q("#custommenu"),1);
         }
+        function e_ctx(e){
+            let d = document.getElementById("e_ctxmenu");
+            d.style.left=e.pageX+"px";
+            d.style.top=e.pageY+"px";
+            d.style.display="block";
+            if(!selectE) selectE = this;
+            
+            return false;
+        }
         
 
         //Export
@@ -190,7 +230,8 @@
             <div id="textmenu">
                 テキスト<input type="text" id="text-txt" onchange="textchange()">
                 フォントサイズ<input type="text" id="text-fsize" onchange="fontchange()">
-                <a class="menu" id="edelete" href="#" onclick="delthis()">削除</a>
+                <a class="menu" id="edelete" href="#" onclick="delthis()">削除</a><br>
+                文字色<input type="color" id="text-color" onchange="textcolorchange()">
             </div>
             <div id="imgmenu">
                 画像<a class="menu" href="#" onclick="selectpicture()">選択</a>
@@ -208,7 +249,9 @@
         <a onclick="contexclick(1)" href="#">文字を追加</a><br>
         <a onclick="contexclick(2)" href="#">画像を追加</a><br>
         <a onclick="contexclick(3)" href="#">その他を追加</a><br>
-        <a onclick="contexclick(0)" href="#">閉じる</a><br>
+    </div>
+    <div id="e_ctxmenu">
+        <a onclick="delthis()" href="#">削除</a><br>
     </div>
     <input type="file" id="picfile">
     <a id="downurl" style="display:none"></a>
