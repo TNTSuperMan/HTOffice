@@ -1,9 +1,9 @@
 <script setup>
-import {RouterLink} from "vue-router";
+import "../assets/style.css"
 </script>
 <template>
     <h1>HTOffice</h1>
-    <RouterLink to="/docs" class="applinks">HTOffice Docs</RouterLink>
-    <RouterLink to="/" class="applinks">HTOffice Table</RouterLink>
-    <RouterLink to="/" class="applinks">HTOffice Emphasis</RouterLink>
+    <a href="#docs" class="applinks">HTOffice Docs</a><br><br>
+    <a href="#" class="applinks">HTOffice Table</a><br><br>
+    <a href="#" class="applinks">HTOffice Emphasis</a>
 </template>
