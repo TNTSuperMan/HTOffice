@@ -51,7 +51,12 @@ function menu(idx){
 function remove(){
     let idx = currentIdx.value;
     //datas.value.splice(idx,1)
-    delete datas.value[idx]
+    //delete datas.value[idx]
+    let ret = datas.value.filter(data => 
+        data != datas[idx]
+    )
+    console.log(ret)
+    datas.value = ret;
     currentIdx.value = -1;
 }
 </script>
