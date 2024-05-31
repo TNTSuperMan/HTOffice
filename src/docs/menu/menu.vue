@@ -1,20 +1,19 @@
 <script setup>
 import { ref, watch } from "vue"
 import Text from "./components/text.vue"
-const m = defineModel()
-const model = ref(m.value)
+const model = defineModel()
 const item = ref(null)
-watch(m,(nm)=>{
-    model.value = nm;
-    if(typeof model.value != "undefined" &&
-    typeof model.value.type != "undefined" &&
-    typeof model.value.data != "undefined"){
-        switch(model.value.type){
+watch(model,m=>{
+    console.log(m)
+    if(typeof m != "undefined" &&
+    typeof m.type != "undefined" &&
+    typeof m.data != "undefined"){
+        switch(m.type){
             case "text":
                 item.value = Text;
                 break;
         }
-}
+    }
 })
 
 </script>

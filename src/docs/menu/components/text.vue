@@ -1,5 +1,4 @@
 <script setup>
-import {ref} from "vue"
 const model = defineModel()
 function erase_back(){
     model.value.data.background = ""

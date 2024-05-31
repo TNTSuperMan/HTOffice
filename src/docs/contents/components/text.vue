@@ -4,7 +4,7 @@ const model = defineModel()
 const text = ref(model.value.text)
 const style = ref("")
 function updateModel(m){
-    text.value = m.text;
+        text.value = m.text;
     style.value = ""
     if(typeof m.background == "string"){
         style.value += "background:" + m.background + ";";
@@ -20,7 +20,7 @@ function updateModel(m){
     }
 }
 updateModel(model.value)
-watch(model.value,updateModel)
+watch(model,updateModel)
 function updateText(e){
     model.value.text = e.target.innerText
 }
