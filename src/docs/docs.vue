@@ -52,8 +52,9 @@ function remove(){
     let idx = currentIdx.value;
     //datas.value.splice(idx,1)
     //delete datas.value[idx]
-    let ret = datas.value.filter(data => 
-        data != datas[idx]
+    const datas_ = datas.value;
+    let ret = datas_.filter(data => 
+        data != datas_[idx]
     )
     console.log(ret)
     datas.value = ret;
