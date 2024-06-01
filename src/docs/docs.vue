@@ -55,5 +55,5 @@ function remove(){
 </script>
 <template>
     <Menu v-model="datas[currentIdx]" @remove="remove"/>
-    <Items v-model="datas" @select="menu"/>
+    <Items v-model="datas" @menu="menu"/>
 </template>

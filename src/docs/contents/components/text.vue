@@ -1,10 +1,11 @@
 <script setup>
-import {ref, watch} from "vue"
+import {computed, ref, watch} from "vue"
 const model = defineModel()
 const text = ref(model.value.text)
 const style = ref("")
-function updateModel(m){
-        text.value = m.text;
+function updateModel(){
+    let m = model.value;
+    text.value = m.text;
     style.value = ""
     if(typeof m.background == "string"){
         style.value += "background:" + m.background + ";";
@@ -19,8 +20,9 @@ function updateModel(m){
         style.value += "font-weight:" + m.weight + ";";
     }
 }
-updateModel(model.value)
+updateModel()
 watch(model,updateModel)
+computed(updateModel)
 function updateText(e){
     model.value.text = e.target.innerText
 }

@@ -4,7 +4,6 @@ import Text from "./components/text.vue"
 const model = defineModel()
 const item = ref(null)
 watch(model,m=>{
-    console.log(m)
     if(typeof m != "undefined" &&
     typeof m.type != "undefined" &&
     typeof m.data != "undefined"){
