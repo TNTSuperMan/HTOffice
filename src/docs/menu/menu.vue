@@ -22,8 +22,8 @@ watch(model,m=>{
         <details>
             <summary>ファイル</summary>
             <Button text="保存" @click="$emit('save')" />
-            <Button text="読込" @click="console.log('UP')" />
-            <Button text="HTMLとしてエクスポート" @click="console.log('EX')" />
+            <Button text="読込" @click="$emit('load')" />
+            <!--<Button text="HTMLとしてエクスポート" @click="console.log('EX')" />-->
         </details>
         
         <component v-if="typeof model !== 'undefined'"
