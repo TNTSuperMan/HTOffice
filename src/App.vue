@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue'
 import Home from "./home/home.vue"
 import Docs from "./docs/docs.vue"
+import Table from "./table/table.vue"
 
 const path = ref(window.location.hash)
 
@@ -12,7 +13,8 @@ window.addEventListener('hashchange', () => {
 const currentPage = computed(() => {
   return {
     '/': Home,
-    'docs': Docs
+    'docs': Docs,
+    'table': Table
   }[path.value.slice(1) || '/'] || Home
 })
 </script>

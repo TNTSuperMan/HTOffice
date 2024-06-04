@@ -1,6 +1,5 @@
 <script setup>
-import { computed } from "vue"
-import "../../assets/docs.css"
+import "./contents.css"
 import Item from "./item.vue"
 const datas = defineModel()
 </script>
@@ -8,7 +7,7 @@ const datas = defineModel()
     <main>
         <Item v-for="(i,idx) in datas" v-model="datas[idx]" @click="$emit('menu',idx)"/>
     </main>
-    <button @click="datas.push({type:'text',data:{text:'text'}})">+</button>
+    <button @click="datas.push({type:'text',data:{text:'text',color:'#000',size:30,weight:100}})">+</button>
 </template>
 <style scoped>
 main{

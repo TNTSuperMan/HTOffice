@@ -52,8 +52,31 @@ function remove(){
     datas.value.splice(currentIdx.value, 1)
     currentIdx.value = -1;
 }
+const isCanSSFP = typeof window.showSaveFilePicker != "undefined"
+const url = ref("")
+const dlr = ref()
+function save(){
+    if(typeof window.showSaveFilePicker == "undefined"){
+        window.showSaveFilePicker({
+            suggestedName: "document",
+            types:[{
+                description: "HTOffice Docs",
+                accept: {"application/json": [".htod"]}
+            }]
+        })
+    }else{
+        let blob = URL.createObjectURL(new Blob([
+            JSON.stringify(datas.value)],{
+            type: "application/json"}))
+        url.value = blob
+        dlr.value.click()
+        setTimeout(e=>URL.revokeObjectURL(blob),20000)
+    }
+}
 </script>
 <template>
-    <Menu v-model="datas[currentIdx]" @remove="remove"/>
+    <a v-if="isCanSSFP" ref="dlr" :href="url" download="document.hod"></a>
+    <Menu v-model="datas[currentIdx]" @remove="remove"
+        @save="save"/>
     <Items v-model="datas" @menu="menu"/>
 </template>
