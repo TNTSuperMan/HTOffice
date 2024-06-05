@@ -30,11 +30,16 @@ updTable()
 <template>
     <Home color="#000"/>
     <table border>
-        <tr><th></th><th v-for="m in max">{{ m }}</th></tr>
+        <tr><th></th><th v-for="m in max">{{ m }}</th>
+            <th><button @click="data.forEach(e=>e.push(''))">+</button></th>
+            <th><button @click="data.forEach(e=>e.pop())">-</button></th>
+        </tr>
         <tr v-for="(dat,i) in data">
             <th>{{ i + 1 }}</th>
             <Item v-for="(d,j) in dat" v-model="data[i][j]"/>
         </tr>
+        <tr><button @click="data.push([])&&max.forEach(e=>data[data.length-1].push(''))">+</button></tr>
+        <tr><button @click="data.pop()">-</button></tr>
     </table>
 </template>
 <style scoped>
