@@ -1,6 +1,7 @@
 <script setup>
 import {reactive, ref, watch} from "vue"
 import Item from "./components/item.vue"
+import Home from "../hbtn.vue"
 const data = reactive([
     [
         "aaa",
@@ -22,12 +23,12 @@ function updTable(){
     for(let i = 0;i < m;i++){
         max.value.push(i + 1)
     }
-    console.log(m)
 }
 watch(data,updTable)
 updTable()
 </script>
 <template>
+    <Home color="#000"/>
     <table border>
         <tr><th></th><th v-for="m in max">{{ m }}</th></tr>
         <tr v-for="(dat,i) in data">

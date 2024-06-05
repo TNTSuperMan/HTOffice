@@ -1,10 +1,10 @@
 <script setup>
 import {computed, ref} from "vue"
 const model = defineModel()
-const text = ref(model.value.text)
+const text = ref(model.value.data.text)
 const style = computed(e=>{
     let s = "";
-    let m = model.value;
+    let m = model.value.data;
     text.value = m.text;
     style.value = ""
     if(typeof m.background == "string"){
@@ -19,20 +19,22 @@ const style = computed(e=>{
     if(typeof m.weight == "number"){
         s += "font-weight:" + m.weight + ";";
     }
+    let data = "<span style='";
+    data += s;
+    data += "'>";
+    data += text.value;
+    data += "</span>";
+    model.value.dom = data;
     return s
 })
 function updateText(e){
-    model.value.text = e.target.innerText
+    model.value.data.text = e.target.innerText
 }
 </script>
 <template>
     <span contenteditable="true" v-text="text" :style="style" @input="updateText"></span>
 </template>
 <style scoped>
-span{
-    word-break:break-all;
-    overflow-wrap:anywhere;
-}
 span:focus-visible{
     outline:none;
 }

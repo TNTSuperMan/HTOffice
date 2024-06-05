@@ -9,5 +9,5 @@ switch(model.value.type){
 }
 </script>
 <template>
-    <component :is="item" v-model="model.data"/>
+    <component :is="item" v-model="model"/>
 </template>

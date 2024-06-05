@@ -2,6 +2,7 @@
 import { ref, watch } from "vue"
 import Button from "./components/button.vue"
 import Text from "./components/text.vue"
+import Home from "../../hbtn.vue"
 const model = defineModel()
 const item = ref(null)
 watch(model,m=>{
@@ -19,11 +20,12 @@ watch(model,m=>{
 </script>
 <template>
     <header>
+        <Home color="#FFF" />
         <details>
             <summary>ファイル</summary>
             <Button text="保存" @click="$emit('save')" />
             <Button text="読込" @click="$emit('load')" />
-            <!--<Button text="HTMLとしてエクスポート" @click="console.log('EX')" />-->
+            <Button text="HTMLとしてエクスポート" @click="$emit('exp')" />
         </details>
         
         <component v-if="typeof model !== 'undefined'"
