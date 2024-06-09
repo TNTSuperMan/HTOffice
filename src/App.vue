@@ -23,3 +23,8 @@ const currentPage = computed(() => {
 <template>
   <component :is="currentPage" />
 </template>
+<style>
+body{
+  background:#333;
+}
+</style>
