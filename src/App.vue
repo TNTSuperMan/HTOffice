@@ -19,6 +19,12 @@ const currentPage = computed(() => {
     'table': Table
   }[path.value.slice(1) || '/'] || Home
 })
+window.addEventListener("beforeunload",e=>{
+  if(path.value.slice(1) != "" || path.value.slice(1) != "/"){
+    e.preventDefault()
+    e.returnValue = ""
+  }
+})
 </script>
 <template>
   <component :is="currentPage" />
