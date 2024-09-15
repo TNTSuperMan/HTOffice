@@ -1,13 +1,23 @@
 <script setup>
 import {ref} from "vue"
-import Items from "./contents/contents.vue"
 import Menu from "./menu/menu.vue"
+import Item from "./contents/item.vue";
 const currentIdx = ref(-1)
 const datas = ref([])
-const menu=idx=>{currentIdx.value = idx;}
 function remove(){
     datas.value.splice(currentIdx.value, 1)
     currentIdx.value = -1;
+}
+function add(){
+    datas.value.push({
+        type:'text',
+        id: Symbol('id'),
+        data:{
+            text:'text',
+            color:'#000',
+            size:30,
+            weight:100
+    }})
 }
 const isCanSSFP = typeof window.showSaveFilePicker != "undefined"
 const url = ref("")
@@ -85,9 +95,16 @@ function exashtml(){
 </script>
 <template>
     <a v-if="isCanSSFP" ref="dlr" :href="url" download="document.hod"></a>
+
     <input ref="upr" v-show="false" type="file"
-    accept=".htod, application/json" @change="load">
+        accept=".htod, application/json" @change="load">
+
     <Menu v-model="datas[currentIdx]" @remove="remove" 
-    @save="save" @load="upr.click()" @exp="exashtml"/>
-    <Items v-model="datas" @menu="menu"/>
+        @save="save" @load="upr.click()" @exp="exashtml"/>
+
+    <main>
+        <Item v-for="(i,idx) in datas" :key="datas[idx].id"
+            v-model="datas[idx]" @click="currentIdx = idx"/>
+    </main>
+    <button @click="add">+</button>
 </template>
